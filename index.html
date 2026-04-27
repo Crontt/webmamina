@@ -36,10 +36,10 @@ input{width:100%;padding:10px;border-radius:10px;border:none;margin:6px 0;backgr
 <div class="wrap">
 <h2 class="section">Menu Favorit</h2>
 <div class="grid">
-<div class="card"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600"><h3>Bakso Urat Joss</h3><div class="price">Rp15.000</div><p class="small">Bakso urat kenyal kuah gurih.</p><button class="btn" onclick="tambah('Bakso Urat Joss',15000)">+ Keranjang</button></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=600"><h3>Bakso Keju</h3><div class="price">Rp15.000</div><p class="small">Isi keju lumer favorit pelanggan.</p><button class="btn" onclick="tambah('Bakso Keju',15000)">+ Keranjang</button></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1559847844-d721426d6edc?w=600"><h3>Mie Ayam</h3><div class="price">Rp10.000</div><p class="small">Mie ayam gurih topping melimpah.</p><button class="btn" onclick="tambah('Mie Ayam',10000)">+ Keranjang</button></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600"><h3>Es Jeruk Jumbo</h3><div class="price">Rp9.000</div><p class="small">Segar dingin cocok teman bakso.</p><button class="btn" onclick="tambah('Es Jeruk Jumbo',9000)">+ Keranjang</button></div>
+<div class="card"><h3>Bakso Urat Joss</h3><div class="price">Rp15.000</div><p class="small">Bakso urat kenyal kuah gurih.</p><button class="btn" onclick="tambah('Bakso Urat Joss',15000)">+ Keranjang</button></div>
+<div class="card"><h3>Bakso Keju</h3><div class="price">Rp15.000</div><p class="small">Isi keju lumer favorit pelanggan.</p><button class="btn" onclick="tambah('Bakso Keju',15000)">+ Keranjang</button></div>
+<div class="card"><h3>Mie Ayam</h3><div class="price">Rp10.000</div><p class="small">Mie ayam gurih topping melimpah.</p><button class="btn" onclick="tambah('Mie Ayam',10000)">+ Keranjang</button></div>
+<div class="card"><h3>Es Jeruk Jumbo</h3><div class="price">Rp9.000</div><p class="small">Segar dingin cocok teman bakso.</p><button class="btn" onclick="tambah('Es Jeruk Jumbo',9000)">+ Keranjang</button></div>
 </div>
 
 <h2 class="section">Checkout Cepat</h2>
@@ -52,7 +52,7 @@ input{width:100%;padding:10px;border-radius:10px;border:none;margin:6px 0;backgr
 </div>
 <script>
 let cart=[];
-const SHEET_URL='AKfycbzgF7O2Rjp4k1NE5GriKI2KbsaZfJi7lJfL40-uQi9T';
+const SHEET_URL='https://script.google.com/macros/s/AKfycbyTS8x0KKybnZ-dujz1hsVi1tQq32iQQOSCEi0iOufI-s18ubEJDPEaO6954pq8ogVrVw/exec';
 function render(){
  let total=0; let qty=0; let html='';
  cart.forEach(i=>{total+=i.harga*i.qty; qty+=i.qty; html+=i.nama+' x'+i.qty+' - Rp'+(i.harga*i.qty).toLocaleString('id-ID')+'<br>';});
