@@ -5,80 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bakso Mamina</title>
 <style>
-:root{--bg:#0f0f10;--card:#1b1b1d;--text:#f7f7f7;--muted:#bdbdbd;--accent:#ff7a00;--green:#25D366}
-body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(180deg,#111,#1b1b1d);color:var(--text)}
-header{padding:24px;text-align:center;background:linear-gradient(135deg,#2b1200,#ff7a00)}
-header img{width:110px;height:110px;border-radius:50%;border:4px solid #fff;object-fit:cover}
-.wrap{max-width:1100px;margin:auto;padding:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.card{background:var(--card);padding:16px;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,.25)}
-.card img{width:100%;height:160px;object-fit:cover;border-radius:14px;margin-bottom:10px}
-.price{color:#ffd27d;font-weight:bold}
-.btn{display:inline-block;background:var(--green);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;border:none;cursor:pointer;font-weight:bold}
-.btn2{background:var(--accent)}
-.topbar{position:sticky;top:0;background:#000;padding:10px;display:flex;justify-content:space-between;align-items:center;z-index:5}
-.cart{font-weight:bold}
-.section{font-size:26px;margin:22px 0 12px}
-.small{color:var(--muted);font-size:14px}
-input{width:100%;padding:10px;border-radius:10px;border:none;margin:6px 0;background:#2a2a2d;color:#fff}
+:root{--bg:#121212;--card:#1f1f1f;--text:#fff;--muted:#bdbdbd;--accent:#ff7a00;--green:#25D366;--danger:#ff3b30}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:18px;text-align:center;background:linear-gradient(135deg,#2b1200,#ff7a00);position:sticky;top:0;z-index:10}
+header img{width:82px;height:82px;border-radius:50%;border:3px solid #fff;object-fit:cover}
+.wrap{max-width:1100px;margin:auto;padding:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:var(--card);padding:14px;border-radius:18px}.price{color:#ffd27d;font-weight:bold}.small{color:var(--muted);font-size:13px}
+.btn{border:none;background:var(--green);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:bold}.btn2{background:var(--accent)}
+.qty{display:flex;gap:6px;align-items:center;margin-top:10px}.qty button{width:34px;height:34px;border:none;border-radius:10px;background:#333;color:#fff;font-size:18px;cursor:pointer}
+.topbar{position:sticky;top:118px;background:#000;padding:10px 14px;display:flex;justify-content:space-between;z-index:9}.section{font-size:24px;margin:18px 0 10px}
+input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;color:#fff;margin-bottom:10px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.badge{position:absolute;top:-8px;right:-10px;background:var(--danger);padding:2px 7px;border-radius:50%;font-size:12px}
+#cartPanel{position:fixed;top:0;right:-380px;width:340px;height:100%;background:#111;z-index:99;padding:18px;transition:.35s;overflow:auto;box-shadow:-8px 0 20px rgba(0,0,0,.4)}
 </style>
 </head>
 <body>
-<header>
-<img src="WhatsApp Image 2026-02-05 at 02.14.50.jpeg">
-<h1>🍜 Bakso Mamina</h1>
-<div>Dark Mode Premium • Order Cepat</div>
-</header>
-<div class="topbar">
-<div>🎉 Promo: Beli 5 Gratis Es</div>
-<div class="cart">🛒 <span id="jumlahItem">0</span> | Rp<span id="grandTotal">0</span></div>
-</div>
+<header><img src="WhatsApp Image 2026-02-05 at 02.14.50.jpeg"><h1>🍜 Bakso Mamina</h1><div>GoFood Style • Dark Premium</div></header>
+<div id="cartPanel"><h2>🛒 Keranjang</h2><div id="popupCart"></div><button class="btn" onclick="toggleCart()">Tutup</button></div>
+<div class="topbar"><div>🎉 Sate Jando Minimal 10.000,-</div><div onclick="toggleCart()" style="cursor:pointer;position:relative">🛒 <span class="badge" id="badgeCart">0</span> <span id="jumlahItem">0</span> | Rp<span id="grandTotal">0</span></div></div>
 <div class="wrap">
-<h2 class="section">Menu Favorit</h2>
-<div class="grid">
-<div class="card"><h3>Bakso Urat Joss</h3><div class="price">Rp15.000</div><p class="small">Bakso urat kenyal kuah gurih.</p><button class="btn" onclick="tambah('Bakso Urat Joss',15000)">+ Keranjang</button></div>
-<div class="card"><h3>Bakso Keju</h3><div class="price">Rp15.000</div><p class="small">Isi keju lumer favorit pelanggan.</p><button class="btn" onclick="tambah('Bakso Keju',15000)">+ Keranjang</button></div>
-<div class="card"><h3>Mie Ayam</h3><div class="price">Rp10.000</div><p class="small">Mie ayam gurih topping melimpah.</p><button class="btn" onclick="tambah('Mie Ayam',10000)">+ Keranjang</button></div>
-<div class="card"><h3>Es Jeruk Jumbo</h3><div class="price">Rp9.000</div><p class="small">Segar dingin cocok teman bakso.</p><button class="btn" onclick="tambah('Es Jeruk Jumbo',9000)">+ Keranjang</button></div>
-</div>
-
-<h2 class="section">Checkout Cepat</h2>
-<div class="card">
-<input id="meja" placeholder="Nomor meja / nama customer">
-<button class="btn btn2" onclick="checkoutWA()">📲 Order WhatsApp</button>
-<button class="btn" onclick="kirimSheet()">📊 Kirim ke Google Sheets</button>
-<div id="listCart" class="small" style="margin-top:10px"></div>
-</div>
+<input id="searchMenu" placeholder="🔍 Cari menu..." onkeyup="filterMenu()">
+<div class="tabs"><button class="btn" onclick="filterKategori('all')">Semua</button><button class="btn" onclick="filterKategori('bakso')">Bakso</button><button class="btn" onclick="filterKategori('mie')">Mie</button><button class="btn" onclick="filterKategori('minum')">Minuman</button><button class="btn" onclick="filterKategori('toping')">Toping</button></div>
+<h2 class="section">Daftar Menu</h2>
+<div class="grid" id="menuGrid"></div>
+<h2 class="section">Checkout</h2>
+<div class="card"><input id="meja" placeholder="Nomor meja / nama customer"> <button class="btn" onclick="kirimSheet()">📊 Kirim Order</button><div id="listCart" class="small" style="margin-top:10px"></div></div>
 </div>
 <script>
-let cart=[];
 const SHEET_URL='https://script.google.com/macros/s/AKfycbyTS8x0KKybnZ-dujz1hsVi1tQq32iQQOSCEi0iOufI-s18ubEJDPEaO6954pq8ogVrVw/exec';
-function render(){
- let total=0; let qty=0; let html='';
- cart.forEach(i=>{total+=i.harga*i.qty; qty+=i.qty; html+=i.nama+' x'+i.qty+' - Rp'+(i.harga*i.qty).toLocaleString('id-ID')+'<br>';});
- document.getElementById('jumlahItem').innerText=qty;
- document.getElementById('grandTotal').innerText=total.toLocaleString('id-ID');
- document.getElementById('listCart').innerHTML=html||'Keranjang kosong';
-}
-function tambah(nama,harga){
- let item=cart.find(x=>x.nama===nama);
- if(item){item.qty++;}else{cart.push({nama,harga,qty:1});}
- render();
-}
-function checkoutWA(){
- let meja=document.getElementById('meja').value||'-';
- let teks='Halo, saya pesan%0A';
- cart.forEach(i=>{teks+=i.nama+' x'+i.qty+'%0A';});
- teks+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('grandTotal').innerText;
- window.open('https://wa.me/6285691916995?text='+teks,'_blank');
-}
-function kirimSheet(){
- let meja=document.getElementById('meja').value||'-';
- let total=document.getElementById('grandTotal').innerText.replace(/\./g,'');
- fetch(SHEET_URL,{method:'POST',body:JSON.stringify({meja:meja,cart:cart,total:total})})
- .then(()=>alert('Pesanan masuk Google Sheets'));
-}
-render();
+let cart=[];
+const menu=[
+['Bakso Daging',10000,'bakso'],['Bakso Urat Joss',15000,'bakso'],['Bakso Mercon',15000,'bakso'],['Bakso Keju',15000,'bakso'],
+['Mie Ayam',10000,'mie'],['Mie Ayam Balungan',15000,'mie'],['Mie Ayam Bakso Cilik',13000,'mie'],['Mie Ayam Bakso Daging',18000,'mie'],['Mie Ayam Bakso Jumbo',24000,'mie'],
+['Es Jeruk Jumbo',9000,'minum'],['Es Teh Manis Jumbo',6000,'minum'],['Es Jeruk',5000,'minum'],['Es Teh Manis',4000,'minum'],['Tea Jus',2000,'minum'],['Teh Tawar',2000,'minum'],
+['Oseng Tetelan',10000,'toping'],['Extra Tetelan',5000,'toping'],['Extra Tahu',1000,'toping'],['Sate Jando',2500,'toping'],['Nasi',5000,'toping']];
+function rupiah(n){return n.toLocaleString('id-ID')}
+function buildMenu(arr=menu){let html='';arr.forEach(m=>{html+=`<div class='card item ${m[2]}'><h3>${m[0]}</h3><div class='price'>Rp${rupiah(m[1])}</div><div class='qty'><button onclick="kurang('${m[0]}')">-</button><span>${getQty(m[0])}</span><button onclick="tambah('${m[0]}',${m[1]})">+</button></div></div>`});document.getElementById('menuGrid').innerHTML=html;}
+function getQty(n){let f=cart.find(x=>x.nama===n);return f?f.qty:0}
+function tambah(n,h){let f=cart.find(x=>x.nama===n);if(f)f.qty++;else cart.push({nama:n,harga:h,qty:1});render();animasi();toggleOpen();}
+function kurang(n){let f=cart.find(x=>x.nama===n);if(!f)return;f.qty--;if(f.qty<=0)cart=cart.filter(x=>x.nama!==n);render();}
+function render(){let total=0,qty=0,html='';cart.forEach(i=>{qty+=i.qty;total+=i.qty*i.harga;html+=`${i.nama} x${i.qty} - Rp${rupiah(i.qty*i.harga)}<br>`});document.getElementById('jumlahItem').innerText=qty;document.getElementById('badgeCart').innerText=qty;document.getElementById('grandTotal').innerText=rupiah(total);document.getElementById('listCart').innerHTML=html||'Keranjang kosong';document.getElementById('popupCart').innerHTML=html||'Keranjang kosong';buildMenu(currentFilter())}
+function toggleCart(){let p=document.getElementById('cartPanel');p.style.right=p.style.right==='0px'?' -380px':'0px';}
+function toggleOpen(){document.getElementById('cartPanel').style.right='0px';document.getElementById('cartPanel').scrollTo({top:0,behavior:'smooth'});}
+function animasi(){document.getElementById('badgeCart').animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:300});}
+function checkoutWA(){let meja=document.getElementById('meja').value||'-';let txt='Halo, saya pesan%0A';cart.forEach(i=>txt+=i.nama+' x'+i.qty+'%0A');txt+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('grandTotal').innerText;window.open('https://wa.me/6285691916995?text='+txt,'_blank');}
+function kirimSheet(){let meja=document.getElementById('meja').value||'-';fetch(SHEET_URL,{method:'POST',body:JSON.stringify({meja,cart,total:document.getElementById('grandTotal').innerText})}).then(()=>alert('Pesanan masuk Google Sheets'));}
+function filterMenu(){let q=document.getElementById('searchMenu').value.toLowerCase();buildMenu(menu.filter(m=>m[0].toLowerCase().includes(q)));}
+function currentFilter(){return menu.filter(m=>m.show!==false)}
+function filterKategori(k){document.getElementById('searchMenu').value='';if(k==='all'){buildMenu(menu);return;}buildMenu(menu.filter(m=>m[2]===k));}
+buildMenu();render();
 </script>
 </body>
 </html>
