@@ -5,55 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bakso Mamina</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#fff7ef;color:#222}
-header{background:linear-gradient(135deg,#ff6a00,#ff9f1c);color:#fff;padding:24px;text-align:center}
-header img{width:110px;height:110px;border-radius:50%;border:5px solid #fff;box-shadow:0 8px 20px rgba(0,0,0,.2)}
-header h1{margin:10px 0 5px;font-size:32px}
-header p{margin:0;font-size:15px}
-.wrap{max-width:900px;margin:auto;padding:18px}
-.hero{background:#fff;border-radius:18px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,.08);margin-top:-25px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:18px}
-.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 18px rgba(0,0,0,.06)}
-.price{color:#ff6a00;font-weight:bold;font-size:20px}
-.btn{display:inline-block;background:#25D366;color:#fff;text-decoration:none;padding:14px 20px;border-radius:12px;font-weight:bold;margin-top:12px}
-.section-title{font-size:24px;margin:26px 0 10px}
-footer{text-align:center;padding:30px;color:#666;font-size:14px}
-.badge{background:#fff0d9;color:#ff6a00;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;display:inline-block;margin-top:8px}
+:root{--bg:#0f0f10;--card:#1b1b1d;--text:#f7f7f7;--muted:#bdbdbd;--accent:#ff7a00;--green:#25D366}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(180deg,#111,#1b1b1d);color:var(--text)}
+header{padding:24px;text-align:center;background:linear-gradient(135deg,#2b1200,#ff7a00)}
+header img{width:110px;height:110px;border-radius:50%;border:4px solid #fff;object-fit:cover}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);padding:16px;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,.25)}
+.card img{width:100%;height:160px;object-fit:cover;border-radius:14px;margin-bottom:10px}
+.price{color:#ffd27d;font-weight:bold}
+.btn{display:inline-block;background:var(--green);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;border:none;cursor:pointer;font-weight:bold}
+.btn2{background:var(--accent)}
+.topbar{position:sticky;top:0;background:#000;padding:10px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.cart{font-weight:bold}
+.section{font-size:26px;margin:22px 0 12px}
+.small{color:var(--muted);font-size:14px}
+input{width:100%;padding:10px;border-radius:10px;border:none;margin:6px 0;background:#2a2a2d;color:#fff}
 </style>
 </head>
 <body>
 <header>
-<img src="WhatsApp Image 2026-02-05 at 02.14.50.jpeg" alt="Bakso Mamina">
-<h1>Bakso Mamina</h1>
-<p>Bakso Enak • Harga Bersahabat • Siap Antar</p>
-<div class="badge">Pesan Cepat via WhatsApp</div>
+<img src="WhatsApp Image 2026-02-05 at 02.14.50.jpeg">
+<h1>🍜 Bakso Mamina</h1>
+<div>Dark Mode Premium • Order Cepat</div>
 </header>
+<div class="topbar">
+<div>🎉 Promo: Beli 5 Gratis Es</div>
+<div class="cart">🛒 <span id="jumlahItem">0</span> | Rp<span id="grandTotal">0</span></div>
+</div>
 <div class="wrap">
-<div class="hero">
-<h2>🍜 Selamat Datang di Bakso Mamina</h2>
-<p>Nikmati bakso jumbo dan bakso sedang dengan rasa mantap, kuah gurih, dan porsi bikin puas.</p>
-<a class="btn" href="https://wa.me/6285691916995">📲 Pesan Sekarang</a>
+<h2 class="section">Menu Favorit</h2>
+<div class="grid">
+<div class="card"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600"><h3>Bakso Urat Joss</h3><div class="price">Rp15.000</div><p class="small">Bakso urat kenyal kuah gurih.</p><button class="btn" onclick="tambah('Bakso Urat Joss',15000)">+ Keranjang</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=600"><h3>Bakso Keju</h3><div class="price">Rp15.000</div><p class="small">Isi keju lumer favorit pelanggan.</p><button class="btn" onclick="tambah('Bakso Keju',15000)">+ Keranjang</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1559847844-d721426d6edc?w=600"><h3>Mie Ayam</h3><div class="price">Rp10.000</div><p class="small">Mie ayam gurih topping melimpah.</p><button class="btn" onclick="tambah('Mie Ayam',10000)">+ Keranjang</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600"><h3>Es Jeruk Jumbo</h3><div class="price">Rp9.000</div><p class="small">Segar dingin cocok teman bakso.</p><button class="btn" onclick="tambah('Es Jeruk Jumbo',9000)">+ Keranjang</button></div>
 </div>
 
-<h2 class="section-title">Menu Favorit</h2>
-<div class="grid">
-<div class="card"><h3>Bakso Urat Jumbo</h3><div class="price">Rp15.000</div><p>Bakso besar isi padat dan kenyal.</p></div>
-<div class="card"><h3>Bakso Keju Jumbo</h3><div class="price">Rp15.000</div><p>Lelehan keju gurih di dalam bakso.</p></div>
-<div class="card"><h3>Bakso Tetelan Jumbo</h3><div class="price">Rp16.000</div><p>Tetelan melimpah, kuah makin nikmat.</p></div>
-<div class="card"><h3>Bakso Keju Sedang</h3><div class="price">Rp12.000</div><p>Ukuran pas, rasa tetap juara.</p></div>
-<div class="card"><h3>Bakso Urat Sedang</h3><div class="price">Rp12.000</div><p>Favorit semua kalangan.</p></div>
-</div>
-
-<h2 class="section-title">Kenapa Pilih Kami?</h2>
-<div class="grid">
-<div class="card">✅ Rasa konsisten dan enak</div>
-<div class="card">✅ Harga ramah kantong</div>
-<div class="card">✅ Bisa makan di tempat / bungkus</div>
-<div class="card">✅ Order mudah via HP</div>
+<h2 class="section">Checkout Cepat</h2>
+<div class="card">
+<input id="meja" placeholder="Nomor meja / nama customer">
+<button class="btn btn2" onclick="checkoutWA()">📲 Order WhatsApp</button>
+<button class="btn" onclick="kirimSheet()">📊 Kirim ke Google Sheets</button>
+<div id="listCart" class="small" style="margin-top:10px"></div>
 </div>
 </div>
-<footer>
-Bakso Mamina © 2026 • Buka setiap hari
-</footer>
+<script>
+let cart=[];
+const SHEET_URL='https://docs.google.com/spreadsheets/d/1Gw5VZ7iLXyFDrkoLdAMNLwLpUFyzELw3ivQqsQNj9uI/edit?usp=sharing';
+function render(){
+ let total=0; let qty=0; let html='';
+ cart.forEach(i=>{total+=i.harga*i.qty; qty+=i.qty; html+=i.nama+' x'+i.qty+' - Rp'+(i.harga*i.qty).toLocaleString('id-ID')+'<br>';});
+ document.getElementById('jumlahItem').innerText=qty;
+ document.getElementById('grandTotal').innerText=total.toLocaleString('id-ID');
+ document.getElementById('listCart').innerHTML=html||'Keranjang kosong';
+}
+function tambah(nama,harga){
+ let item=cart.find(x=>x.nama===nama);
+ if(item){item.qty++;}else{cart.push({nama,harga,qty:1});}
+ render();
+}
+function checkoutWA(){
+ let meja=document.getElementById('meja').value||'-';
+ let teks='Halo, saya pesan%0A';
+ cart.forEach(i=>{teks+=i.nama+' x'+i.qty+'%0A';});
+ teks+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('grandTotal').innerText;
+ window.open('https://wa.me/6285691916995?text='+teks,'_blank');
+}
+function kirimSheet(){
+ let meja=document.getElementById('meja').value||'-';
+ let total=document.getElementById('grandTotal').innerText.replace(/\./g,'');
+ fetch(SHEET_URL,{method:'POST',body:JSON.stringify({meja:meja,cart:cart,total:total})})
+ .then(()=>alert('Pesanan masuk Google Sheets'));
+}
+render();
+</script>
 </body>
 </html>
