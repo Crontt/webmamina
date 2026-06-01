@@ -40,7 +40,111 @@ const menu=[
 ['Es Jeruk Jumbo',9000,'minum'],['Es Teh Manis Jumbo',6000,'minum'],['Es Jeruk',5000,'minum'],['Es Teh Manis',4000,'minum'],['Tea Jus',2000,'minum'],['Teh Tawar',2000,'minum'],
 ['Oseng Tetelan',10000,'toping'],['Extra Tetelan',5000,'toping'],['Extra Tahu',1000,'toping'],['Sate Jando',2500,'toping'],['Nasi',5000,'toping']];
 function rupiah(n){return n.toLocaleString('id-ID')}
-function buildMenu(arr=menu){let html='';arr.forEach(m=>{html+=`<div class='card item ${m[2]}'><h3>${m[0]}</h3><div class='price'>Rp${rupiah(m[1])}</div><div class='qty'><button onclick="kurang('${m[0]}')">-</button><span>${getQty(m[0])}</span><button onclick="tambah('${m[0]}',${m[1]})">+</button></div></div>`});document.getElementById('menuGrid').innerHTML=html;}
+
+function buildMenu(arr=menu){
+let html='';
+const menuBaksoChecklist = [
+'Bakso Daging',
+'Bakso Urat Joss',
+'Bakso Mercon',
+'Bakso Keju'
+];
+
+arr.forEach(m=>{
+
+const tampilChecklist =
+menuBaksoChecklist.includes(m[0]);
+
+html += `
+<div class='card item ${m[2]}'>
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+">
+
+<div style="flex:1">
+
+<h3 style="margin:0 0 6px">
+${m[0]}
+</h3>
+
+<div class='price'>
+Rp${rupiah(m[1])}
+</div>
+
+${
+tampilChecklist
+?
+`
+<div style="
+margin-top:10px;
+display:grid;
+grid-template-columns:auto auto;
+gap:8px 18px;
+font-size:13px;
+max-width:180px;
+">
+
+<div style="
+grid-column:1 / span 2;
+color:#aaa;
+margin-bottom:4px;
+">
+Pilihan Isi
+</div>
+
+<label><input type="checkbox"> Bihun</label>
+<label><input type="checkbox"> Mie</label>
+
+<label><input type="checkbox"> Toge</label>
+<label><input type="checkbox"> Sawi</label>
+
+</div>
+`
+:
+''
+}
+
+</div>
+
+<div class="qty" style="
+display:flex;
+align-items:center;
+gap:10px;
+min-width:90px;
+justify-content:flex-end;
+">
+
+<button
+onclick="kurang('${m[0]}')">
+−
+</button>
+
+<span style="
+min-width:16px;
+text-align:center;
+font-weight:bold;
+">
+${getQty(m[0])}
+</span>
+
+<button
+onclick="tambah('${m[0]}',${m[1]})">
++
+</button>
+
+</div>
+</div>
+</div>
+</div>
+`;
+
+});
+document.getElementById('menuGrid').innerHTML = html;}
+
 function getQty(n){let f=cart.find(x=>x.nama===n);return f?f.qty:0}
 function tambah(n,h){let f=cart.find(x=>x.nama===n);if(f)f.qty++;else cart.push({nama:n,harga:h,qty:1});render();animasi();toggleOpen();}
 function kurang(n){let f=cart.find(x=>x.nama===n);if(!f)return;f.qty--;if(f.qty<=0)cart=cart.filter(x=>x.nama!==n);render();}
