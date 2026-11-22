@@ -31,133 +31,189 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 <h2 class="section">Checkout</h2>
 <div class="card"><input id="meja" placeholder="Nomor meja / nama customer"> <button class="btn" onclick="kirimSheet()">📊 Kirim Order</button><div id="listCart" class="small" style="margin-top:10px"></div></div>
 </div>
+
 <script>
 const SHEET_URL='https://script.google.com/macros/s/AKfycbyTS8x0KKybnZ-dujz1hsVi1tQq32iQQOSCEi0iOufI-s18ubEJDPEaO6954pq8ogVrVw/exec';
 let cart=[];
+let pilihanSementara={};
+
 const menu=[
 ['Bakso Daging',10000,'bakso'],['Bakso Urat',15000,'bakso'],['Bakso Mercon',15000,'bakso'],['Bakso Keju',15000,'bakso'],['Bakso Telur',15000,'bakso'],['Bakso Daging Jumbo',20000,'bakso'],
 ['Mie Ayam',10000,'mie'],['Mie Ayam Tulang',15000,'mie'],['Mie Ayam Bakso Kecil',13000,'mie'],['Mie Ayam Bakso Daging',18000,'mie'],['Mie Ayam Bakso Urat Dll',24000,'mie'],['Mie Ayam Bakso Jumbo',29000,'mie'],
 ['Dimsum Ori isi 3',10000,'dimsum'],['Dimsum Ori isi 6',20000,'dimsum'],['Dimsum Mentai isi 3',12000,'dimsum'],['Dimsum Mentai isi 6',23000,'dimsum'],
 ['Es Jeruk',5000,'minum'],['Es Teh Manis',4000,'minum'],['Es Nutrisari',4000,'minum'],['Tea Jus',2000,'minum'],
 ['Extra Tetelan',7000,'toping'],['Extra Kikil',3000,'toping'],['Extra Tahu',1000,'toping'],['Sate Marangi',15000,'toping'],['Nasi',5000,'toping']];
-function rupiah(n){return n.toLocaleString('id-ID')}
 
-function buildMenu(arr=menu){
-let html='';
 const menuBaksoChecklist = [
-'Bakso Daging',
-'Bakso Urat',
-'Bakso Mercon',
-'Bakso Keju',
-'Bakso Telur',
-'Bakso Daging Jumbo',
+  'Bakso Daging',
+  'Bakso Urat',
+  'Bakso Mercon',
+  'Bakso Keju',
+  'Bakso Telur',
+  'Bakso Daging Jumbo',
 ];
 
-arr.forEach(m=>{
+const opsiIsi = ['Bihun', 'Mie', 'Toge', 'Sawi'];
+let activeList = menu;
 
-const tampilChecklist =
-menuBaksoChecklist.includes(m[0]);
+function rupiah(n){return n.toLocaleString('id-ID')}
 
-html += `
-<div class='card item ${m[2]}'>
+function ubahIsi(namaMenu, isi, isChecked){
+  if(!pilihanSementara[namaMenu]) pilihanSementara[namaMenu] = [];
+  if(isChecked){
+    if(!pilihanSementara[namaMenu].includes(isi)) pilihanSementara[namaMenu].push(isi);
+  } else {
+    pilihanSementara[namaMenu] = pilihanSementara[namaMenu].filter(x => x !== isi);
+  }
 
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-gap:12px;
-">
-
-<div style="flex:1">
-
-<h3 style="margin:0 0 6px">
-${m[0]}
-</h3>
-
-<div class='price'>
-Rp${rupiah(m[1])}
-</div>
-
-${
-tampilChecklist
-?
-`
-<div style="
-margin-top:5px;
-display:grid;
-grid-template-columns:auto auto;
-gap:4px 9px;
-font-size:11px;
-max-width:120px;
-">
-
-<div style="
-grid-column:1 / span 4;
-color:#aaa;
-margin-bottom:2px;
-">
-Pilihan Isi
-</div>
-<label><input type="checkbox"> Bihun</label>
-<label><input type="checkbox"> Mie</label>
-<label><input type="checkbox"> Toge</label>
-<label><input type="checkbox"> Sawi</label>
-</div>
-`
-:
-''
+  let itemDiCart = cart.find(x => x.nama === namaMenu);
+  if(itemDiCart){
+    itemDiCart.isi = [...pilihanSementara[namaMenu]];
+    render(false);
+  }
 }
 
-</div>
+function buildMenu(arr=activeList){
+  activeList = arr;
+  const grid = document.getElementById('menuGrid');
+  if(!grid) return;
 
-<div class="qty" style="
-display:flex;
-align-items:center;
-gap:10px;
-min-width:90px;
-justify-content:flex-end;
-">
+  let html='';
+  arr.forEach(m=>{
+    const namaMenu = m[0];
+    const tampilChecklist = menuBaksoChecklist.includes(namaMenu);
+    const selectedIsi = pilihanSementara[namaMenu] || [];
 
-<button
-onclick="kurang('${m[0]}')">
-−
-</button>
+    html += `
+    <div class='card item ${m[2]}'>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div style="flex:1">
+          <h3 style="margin:0 0 6px">${namaMenu}</h3>
+          <div class='price'>Rp${rupiah(m[1])}</div>
 
-<span style="
-min-width:16px;
-text-align:center;
-font-weight:bold;
-">
-${getQty(m[0])}
-</span>
+          ${tampilChecklist ? `
+          <div style="margin-top:5px;display:grid;grid-template-columns:auto auto;gap:5px 10px;font-size:12px;max-width:140px;">
+            <div style="grid-column:1 / span 4;color:#aaa;margin-bottom:2px;">Pilihan Isi</div>
+            ${opsiIsi.map(isi => `
+              <label style="display:flex;align-items:center;gap:4px;cursor:pointer;">
+                <input type="checkbox" style="width:auto;margin:0;" 
+                  ${selectedIsi.includes(isi) ? 'checked' : ''} 
+                  onchange="ubahIsi('${namaMenu}', '${isi}', this.checked)"> ${isi}
+              </label>
+            `).join('')}
+          </div>` : ''}
+        </div>
 
-<button
-onclick="tambah('${m[0]}',${m[1]})">
-+
-</button>
+        <div class="qty" style="display:flex;align-items:center;gap:10px;min-width:90px;justify-content:flex-end;">
+          <button onclick="kurang('${namaMenu}')">−</button>
+          <span style="min-width:16px;text-align:center;font-weight:bold;">${getQty(namaMenu)}</span>
+          <button onclick="tambah('${namaMenu}',${m[1]})">+</button>
+        </div>
+      </div>
+    </div>`;
+  });
 
-</div>
-</div>
-</div>
-</div>
-`;
+  grid.innerHTML = html;
+}
 
-});
-document.getElementById('menuGrid').innerHTML = html;}
+function getQty(n){
+  let f=cart.find(x=>x.nama===n);
+  return f?f.qty:0;
+}
 
-function getQty(n){let f=cart.find(x=>x.nama===n);return f?f.qty:0}
-function tambah(n,h){let f=cart.find(x=>x.nama===n);if(f)f.qty++;else cart.push({nama:n,harga:h,qty:1});render();animasi();toggleOpen();}
-function kurang(n){let f=cart.find(x=>x.nama===n);if(!f)return;f.qty--;if(f.qty<=0)cart=cart.filter(x=>x.nama!==n);render();}
-function render(){let total=0,qty=0,html='';cart.forEach(i=>{qty+=i.qty;total+=i.qty*i.harga;html+=`${i.nama} x${i.qty} - Rp${rupiah(i.qty*i.harga)}<br>`});document.getElementById('jumlahItem').innerText=qty;document.getElementById('badgeCart').innerText=qty;document.getElementById('grandTotal').innerText=rupiah(total);document.getElementById('listCart').innerHTML=html||'Keranjang kosong';document.getElementById('popupCart').innerHTML=html||'Keranjang kosong';buildMenu(currentFilter())}
-function toggleCart(){let p=document.getElementById('cartPanel');p.style.right=p.style.right==='0px'?' -380px':'0px';}
-function toggleOpen(){document.getElementById('cartPanel').style.right='0px';document.getElementById('cartPanel').scrollTo({top:0,behavior:'smooth'});}
-function animasi(){document.getElementById('badgeCart').animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:300});}
-function checkoutWA(){let meja=document.getElementById('meja').value||'-';let txt='Halo, saya pesan%0A';cart.forEach(i=>txt+=i.nama+' x'+i.qty+'%0A');txt+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('grandTotal').innerText;window.open('https://wa.me/6285691916995?text='+txt,'_blank');}
-function kirimSheet(){let meja=document.getElementById('meja').value||'-';fetch(SHEET_URL,{method:'POST',body:JSON.stringify({meja,cart,total:document.getElementById('grandTotal').innerText})}).then(()=>alert('Pesanan masuk Google Sheets'));}
-function filterMenu(){let q=document.getElementById('searchMenu').value.toLowerCase();buildMenu(menu.filter(m=>m[0].toLowerCase().includes(q)));}
-function currentFilter(){return menu.filter(m=>m.show!==false)}
-function filterKategori(k){document.getElementById('searchMenu').value='';if(k==='all'){buildMenu(menu);return;}buildMenu(menu.filter(m=>m[2]===k));}
-buildMenu();render();
+function tambah(n,h){
+  let isiTerpilih = pilihanSementara[n] ? [...pilihanSementara[n]] : [];
+  let f=cart.find(x=>x.nama===n);
+  if(f){
+    f.qty++;
+    f.isi = isiTerpilih;
+  } else {
+    cart.push({nama:n, harga:h, qty:1, isi:isiTerpilih});
+  }
+  render();
+  animasi();
+  toggleOpen();
+}
+
+function kurang(n){
+  let f=cart.find(x=>x.nama===n);
+  if(!f)return;
+  f.qty--;
+  if(f.qty<=0) cart=cart.filter(x=>x.nama!==n);
+  render();
+}
+
+function render(rebuild=true){
+  let total=0, qty=0, html='';
+  cart.forEach(i=>{
+    qty+=i.qty;
+    total+=i.qty*i.harga;
+    let infoIsi = (i.isi && i.isi.length > 0) ? ` <span style="color:#ffd27d">(${i.isi.join(', ')})</span>` : '';
+    html+=`${i.nama}${infoIsi} x${i.qty} - Rp${rupiah(i.qty*i.harga)}<br>`;
+  });
+
+  document.getElementById('jumlahItem').innerText=qty;
+  document.getElementById('badgeCart').innerText=qty;
+  document.getElementById('grandTotal').innerText=rupiah(total);
+  document.getElementById('listCart').innerHTML=html||'Keranjang kosong';
+  document.getElementById('popupCart').innerHTML=html||'Keranjang kosong';
+  if(rebuild) buildMenu(activeList);
+}
+
+function toggleCart(){
+  let p=document.getElementById('cartPanel');
+  p.style.right=p.style.right==='0px'?'-380px':'0px';
+}
+function toggleOpen(){
+  document.getElementById('cartPanel').style.right='0px';
+  document.getElementById('cartPanel').scrollTo({top:0,behavior:'smooth'});
+}
+function animasi(){
+  document.getElementById('badgeCart').animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:300});
+}
+
+function checkoutWA(){
+  let meja=document.getElementById('meja').value||'-';
+  let txt='Halo, saya pesan%0A';
+  cart.forEach(i=>{
+    let infoIsi = (i.isi && i.isi.length > 0) ? ` (${i.isi.join(', ')})` : '';
+    txt += `${i.nama}${infoIsi} x${i.qty}%0A`;
+  });
+  txt+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('grandTotal').innerText;
+  window.open('https://wa.me/6285691916995?text='+txt,'_blank');
+}
+
+function kirimSheet(){
+  if(cart.length === 0){
+    alert('Keranjang masih kosong! Klik tombol + pada menu terlebih dahulu.');
+    return;
+  }
+  let meja=document.getElementById('meja').value||'-';
+  let cartPayload = cart.map(i => ({
+    nama: (i.isi && i.isi.length > 0) ? `${i.nama} (${i.isi.join(', ')})` : i.nama,
+    isi: i.isi || [],
+    harga: i.harga,
+    qty: i.qty
+  }));
+
+  fetch(SHEET_URL,{
+    method:'POST',
+    body:JSON.stringify({meja, cart: cartPayload, total:document.getElementById('grandTotal').innerText})
+  }).then(()=>alert('Pesanan masuk Google Sheets'));
+}
+
+function filterMenu(){
+  let q=document.getElementById('searchMenu').value.toLowerCase();
+  buildMenu(menu.filter(m=>m[0].toLowerCase().includes(q)));
+}
+function filterKategori(k){
+  document.getElementById('searchMenu').value='';
+  if(k==='all'){buildMenu(menu);return;}
+  buildMenu(menu.filter(m=>m[2]===k));
+}
+
+buildMenu();
+render();
 </script>
 </body>
 </html>
