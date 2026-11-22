@@ -22,10 +22,10 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 <body>
 <header><img src="WhatsApp Image 2026-02-05 at 02.14.50.jpeg"><h1>🍜 Bakso Mamina</h1><div>Mamina Style • Dark Premium</div></header>
 <div id="cartPanel"><h2>🛒 Keranjang</h2><div id="popupCart"></div><button class="btn" onclick="toggleCart()">Tutup</button></div>
-<div class="topbar"><div>🎉 Sate Marangi Hanya Rp. 15.000/10 Tusuk,-</div><div onclick="toggleCart()" style="cursor:pointer;position:relative">🛒 <span class="badge" id="badgeCart">0</span> <span id="jumlahItem">0</span> | Rp<span id="grandTotal">0</span></div></div>
+<div class="topbar"><div>🎉 Sate Marangi Hanya 15.000 / 10 Tusuk,-</div><div onclick="toggleCart()" style="cursor:pointer;position:relative">🛒 <span class="badge" id="badgeCart">0</span> <span id="jumlahItem">0</span> | Rp<span id="grandTotal">0</span></div></div>
 <div class="wrap">
 <input id="searchMenu" placeholder="🔍 Cari menu..." onkeyup="filterMenu()">
-<div class="tabs"><button class="btn" onclick="filterKategori('all')">Semua</button><button class="btn" onclick="filterKategori('bakso')">Bakso</button><button class="btn" onclick="filterKategori('mie')">Mie</button><button class="btn" onclick="filterKategori('minum')">Minuman</button><button class="btn" onclick="filterKategori('toping')">Toping</button></div>
+<div class="tabs"><button class="btn" onclick="filterKategori('all')">Semua</button><button class="btn" onclick="filterKategori('bakso')">Bakso</button><button class="btn" onclick="filterKategori('mie')">Mie</button><button class="btn" onclick="filterKategori('dimsum')">Dimsum</button><button class="btn" onclick="filterKategori('minum')">Minuman</button><button class="btn" onclick="filterKategori('toping')">Toping</button></div>
 <h2 class="section">Daftar Menu</h2>
 <div class="grid" id="menuGrid"></div>
 <h2 class="section">Checkout</h2>
@@ -36,9 +36,10 @@ const SHEET_URL='https://script.google.com/macros/s/AKfycbyTS8x0KKybnZ-dujz1hsVi
 let cart=[];
 const menu=[
 ['Bakso Daging',10000,'bakso'],['Bakso Urat Joss',15000,'bakso'],['Bakso Mercon',15000,'bakso'],['Bakso Keju',15000,'bakso'],['Bakso Telur',15000,'bakso'],['Bakso Daging Jumbo',20000,'bakso'],
-['Mie Ayam',10000,'mie'],['Mie Ayam Balungan',15000,'mie'],['Mie Ayam Bakso Cilik',13000,'mie'],['Mie Ayam Bakso Daging',18000,'mie'],['Mie Ayam Bakso Jumbo',24000,'mie'],
-,['Es Jeruk',5000,'minum'],['Es Teh Manis',4000,'minum'],['Es Nutrisari',4000,'minum']['Tea Jus',2000,'minum'],['Teh Tawar',2000,'minum'],
-,['Extra Tetelan',7000,'toping'],['Extra Tahu',1000,'toping'],['Sate Marangi',15000,'toping'],['Nasi',5000,'toping']];
+['Mie Ayam',10000,'mie'],['Mie Ayam Tulang',15000,'mie'],['Mie Ayam Bakso Kecil',13000,'mie'],['Mie Ayam Bakso Daging',18000,'mie'],['Mie Ayam Bakso Urat Dll',24000,'mie'],['Mie Ayam Bakso Jumbo',29000,'mie'],
+['Dimsum Ori isi 3',10000,'dimsum'],['Dimsum Ori isi 6',20000,'dimsum'],['Dimsum Mentai isi 3',12000,'dimsum'],['Dimsum Mentai isi 6',23000,'dimsum'],
+['Es Jeruk',5000,'minum'],['Es Teh Manis',4000,'minum'],['Es Nutrisari',4000,'minum'],['Tea Jus',2000,'minum'],
+['Extra Tetelan',7000,'toping'],['Extra Kikil',3000,'toping'],['Extra Tahu',1000,'toping'],['Sate Marangi',15000,'toping'],['Nasi',5000,'toping']];
 function rupiah(n){return n.toLocaleString('id-ID')}
 
 function buildMenu(arr=menu){
@@ -49,7 +50,7 @@ const menuBaksoChecklist = [
 'Bakso Mercon',
 'Bakso Keju',
 'Bakso Telur',
-'Bakso Daging Jumbo'
+'Bakso Daging Jumbo',
 ];
 
 arr.forEach(m=>{
@@ -82,15 +83,30 @@ tampilChecklist
 ?
 `
 <div style="
-margin-top:10px;
+margin-top:5px;
 display:grid;
 grid-template-columns:auto auto;
-gap:8px 18px;
-font-size:13px;
-max-width:180px;
+gap:4px 9px;
+font-size:11px;
+max-width:120px;
 ">
 
-
+<div style="
+grid-column:1 / span 4;
+color:#aaa;
+margin-bottom:2px;
+">
+Pilihan Isi
+</div>
+<label><input type="checkbox"> Bihun</label>
+<label><input type="checkbox"> Mie</label>
+<label><input type="checkbox"> Toge</label>
+<label><input type="checkbox"> Sawi</label>
+</div>
+`
+:
+''
+}
 
 </div>
 
