@@ -34,8 +34,8 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.badge{position:absolute;top:-8px;right:-10px;background:var(--danger);padding:2px 7px;border-radius:50%;font-size:12px}
 #cartPanel{position:fixed;top:0;right:-380px;width:340px;height:100%;background:#111;z-index:99;padding:18px;transition:.35s;overflow:auto;box-shadow:-8px 0 20px rgba(0,0,0,.4)}
 .opsi-box{margin-top:8px;padding-top:8px;border-top:1px solid #333;font-size:11px;min-width:0}
-.isi-list{display:flex;flex-direction:column;gap:5px;margin-top:4px}
-.toping-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:4px;max-width:100%}
+.isi-list{display:flex;flex-direction:row;gap:5px;margin-top:4px}
+.toping-row{display:flex;flex-wrap:row;align-items:center;gap:6px 10px;margin-top:4px;max-width:100%}
 .opsi-label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;margin:0;line-height:1.25;max-width:100%}
 .opsi-label input{width:auto !important;margin:0 !important;padding:0 !important;flex-shrink:0}
 .cart-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #262626}
@@ -80,7 +80,14 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 </div>
 <div class="wrap">
 <input id="searchMenu" placeholder="🔍 Cari menu..." onkeyup="filterMenu()">
-<div class="tabs"><button class="btn" onclick="filterKategori('all')">Semua</button><button class="btn" onclick="filterKategori('bakso')">Bakso</button><button class="btn" onclick="filterKategori('mie')">Mie</button><button class="btn" onclick="filterKategori('dimsum')">Dimsum</button><button class="btn" onclick="filterKategori('sate')">Sate</button><button class="btn" onclick="filterKategori('minum')">Minuman</button></div>
+<div class="tabs">
+  <button class="btn" onclick="filterKategori('all')">Semua</button>
+  <button class="btn" onclick="filterKategori('bakso')">Bakso</button>
+  <button class="btn" onclick="filterKategori('mie')">Mie</button>
+  <button class="btn" onclick="filterKategori('dimsum')">Dimsum</button>
+  <button class="btn" onclick="filterKategori('minum')">Minuman</button>
+  <button class="btn" onclick="filterKategori('sate')">Sate</button>
+</div>
 <h2 class="section">Daftar Menu</h2>
 <div class="grid" id="menuGrid"></div>
 <h2 class="section">Checkout</h2>
@@ -108,7 +115,7 @@ let jumlahSementara={};  // { [namaMenu]: number }
 let cartAutoCloseTimer = null;
 
 const menu=[
-['Bakso Daging',10000,'bakso'],['Bakso Urat',15000,'bakso'],['Bakso Mercon',15000,'bakso'],['Bakso Keju',15000,'bakso'],['Bakso Telur',15000,'bakso'],['Bakso Daging Jumbo',20000,'bakso'],
+['Bakso Daging',10000,'bakso'],['Bakso Urat Joss',15000,'bakso'],['Bakso Mercon',15000,'bakso'],['Bakso Keju',15000,'bakso'],['Bakso Telur',15000,'bakso'],['Bakso Daging Jumbo',20000,'bakso'],
 ['Mie Ayam',10000,'mie'],['Mie Ayam Tulang',15000,'mie'],['Mie Ayam Bakso Kecil',13000,'mie'],['Mie Ayam Bakso Daging',18000,'mie'],['Mie Ayam Bakso Urat Dll',24000,'mie'],['Mie Ayam Bakso Jumbo',29000,'mie'],
 ['Dimsum Ori isi 3',10000,'dimsum'],['Dimsum Ori isi 6',20000,'dimsum'],['Dimsum Mentai isi 3',12000,'dimsum'],['Dimsum Mentai isi 6',23000,'dimsum'],
 ['Es Jeruk',5000,'minum'],['Es Teh Manis',4000,'minum'],['Es Nutrisari',4000,'minum'],['Tea Jus',2000,'minum'],
@@ -116,7 +123,7 @@ const menu=[
 
 const menuBaksoChecklist = [
   'Bakso Daging',
-  'Bakso Urat',
+  'Bakso Urat Joss',
   'Bakso Mercon',
   'Bakso Keju',
   'Bakso Telur',
@@ -445,10 +452,14 @@ function kirimSheet(){
     };
   });
 
-  // Otomatis tampilkan struk saat Kirim Order diklik
   buatStruk(true);
 
   fetch(SHEET_URL,{
     method:'POST',
     body:JSON.stringify({meja, cart: cartPayload, total:document.getElementById('checkoutTotal').innerText})
-  }).then(()=>alert('Pesanan masuk Google Sheets & struk si
+  }).then(()=>alert('Pesanan masuk Google Sheets & struk siap dicetak'));
+}
+
+function filterMenu(){
+  let q=document.getElementById('searchMenu').value.toLowerCase();
+  buildMenu(menu.filter(m=
