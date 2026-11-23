@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tentang Bakso Mamina — Cigedug Rajadesa</title>
+<style>
+:root{
+  --bg:#121212;
+  --card:#1f1f1f;
+  --text:#fff;
+  --muted:#bdbdbd;
+  --accent:#ff3b30;
+  --green:#25D366;
+  --gold:#ffd27d;
+  --border:#2e2e2e;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+
+header{
+  padding:24px 16px;
+  text-align:center;
+  background:linear-gradient(135deg,#4a0404,#8b0000);
+  border-bottom:1px solid #5a1212;
+}
+header img{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  border:3px solid #fff;
+  object-fit:cover;
+}
+.brand-title{
+  margin:10px 0 4px;
+  display:inline-block;
+  font-size:28px;
+  animation:gerakMamina 2.4s ease-in-out infinite;
+}
+@keyframes gerakMamina{
+  0%,100%{transform:translateY(0) rotate(0deg) scale(1)}
+  25%{transform:translateY(-3px) rotate(-1.5deg) scale(1.02)}
+  50%{transform:translateY(0) rotate(0deg) scale(1.04)}
+  75%{transform:translateY(-2px) rotate(1.5deg) scale(1.02)}
+}
+.tagline{color:#ffd8d8;font-size:14px}
+
+.promo-bar{
+  background:#000;
+  padding:10px 14px;
+  overflow:hidden;
+  white-space:nowrap;
+  border-bottom:1px solid #242424;
+}
+.promo-text{
+  display:inline-block;
+  padding-right:20px;
+  color:var(--gold);
+  font-weight:bold;
+  font-size:13px;
+  animation:jalanKananKeKiri 8s linear infinite;
+}
+@keyframes jalanKananKeKiri{
+  0%{transform:translateX(100%)}
+  100%{transform:translateX(-100%)}
+}
+
+.wrap{max-width:1050px;margin:auto;padding:18px 16px 36px}
+.section{font-size:22px;margin:22px 0 12px;color:var(--gold)}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:14px;
+}
+.card{
+  background:var(--card);
+  padding:16px;
+  border-radius:18px;
+  border:1px solid var(--border);
+}
+.card h3{margin:0 0 8px;color:#fff}
+.muted{color:var(--muted);font-size:14px}
+.alamat-box{
+  background:#181818;
+  border:1px dashed #666;
+  border-radius:14px;
+  padding:14px;
+  margin-top:10px;
+}
+.alamat-utama{
+  font-size:16px;
+  font-weight:bold;
+  color:var(--gold);
+  margin:4px 0;
+}
+
+.menu-list{
+  list-style:none;
+  padding:0;
+  margin:8px 0 0;
+  font-size:14px;
+}
+.menu-list li{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  padding:6px 0;
+  border-bottom:1px solid #2b2b2b;
+}
+.menu-list li:last-child{border-bottom:none}
+.price{color:var(--gold);font-weight:bold;white-space:nowrap}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.btn{
+  border:none;
+  background:var(--green);
+  color:#fff;
+  padding:11px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  text-decoration:none;
+  display:inline-block;
+  font-size:14px;
+}
+.btn-maps{background:#3a6ea5}
+.btn-dark{background:#2d2d2d;border:1px solid #444}
+
+footer{
+  text-align:center;
+  padding:18px 14px 28px;
+  color:var(--muted);
+  font-size:13px;
+  border-top:1px solid #242424;
+  margin-top:24px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .brand-title,.promo-text{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="WhatsApp Image 2026-02-05 at 02.14.50.jpeg" alt="Logo Bakso Mamina">
+  <br>
+  <h1 class="brand-title">🍜 Bakso Mamina</h1>
+  <div class="tagline">Cigedug Rajadesa</div>
+</header>
+
+<div class="promo-bar">
+  <span class="promo-text">🎉 Sate Marangi Hanya 15.000 / 10 Tusuk • Mampir ke Bakso Mamina !</span>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h3>Tentang Bakso Mamina</h3>
+    <p class="muted" style="margin:0">
+      <b>Bakso Mamina</b> hadir menyajikan aneka bakso pilihan, mie ayam, dimsum, minuman segar, serta sate marangi dan nasi di kawasan <b>Cigedug Rajadesa</b>. Setiap porsi bakso dapat disesuaikan pilihan isinya (Bihun, Mie, Toge, Sawi) maupun toping tambahannya.
+    </p>
+
+    <div class="alamat-box">
+      <div class="muted" style="font-size:12px">📍 Lokasi Kedai</div>
+      <div class="alamat-utama">Cigedug Rajadesa</div>
+      <div class="muted" style="font-size:13px">Silakan datang langsung ke lokasi untuk santap di tempat maupun bawa pulang.</div>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-maps" href="https://www.google.com/maps/search/?api=1&query=Cigedug+Rajadesa" target="_blank" rel="noopener">🗺️ Buka di Google Maps</a>
+      <a class="btn" href="https://wa.me/6285691916995?text=Halo%20Bakso%20Mamina%20Cigedug%20Rajadesa" target="_blank" rel="noopener">💬 Hubungi WhatsApp</a>
+    </div>
+  </div>
+
+  <h2 class="section">Menu Unggulan &amp; Kategori</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>🍲 Bakso</h3>
+      <ul class="menu-list">
+        <li><span>Bakso Daging</span><span class="price">Rp10.000</span></li>
+        <li><span>Bakso Urat Joss</span><span class="price">Rp15.000</span></li>
+        <li><span>Bakso Mercon</span><span class="price">Rp15.000</span></li>
+        <li><span>Bakso Keju</span><span class="price">Rp15.000</span></li>
+        <li><span>Bakso Telur</span><span class="price">Rp15.000</span></li>
+        <li><span>Bakso Daging Jumbo</span><span class="price">Rp20.000</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🍜 Mie Ayam</h3>
+      <ul class="menu-list">
+        <li><span>Mie Ayam</span><span class="price">Rp10.000</span></li>
+        <li><span>Mie Ayam Tulang</span><span class="price">Rp15.000</span></li>
+        <li><span>Mie Ayam Bakso Kecil</span><span class="price">Rp13.000</span></li>
+        <li><span>Mie Ayam Bakso Daging</span><span class="price">Rp18.000</span></li>
+        <li><span>Mie Ayam Bakso Urat Dll</span><span class="price">Rp24.000</span></li>
+        <li><span>Mie Ayam Bakso Jumbo</span><span class="price">Rp29.000</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🥟 Dimsum &amp; Minuman</h3>
+      <ul class="menu-list">
+        <li><span>Dimsum Ori isi 3 / isi 6</span><span class="price">Rp10.000 / Rp20.000</span></li>
+        <li><span>Dimsum Mentai isi 3 / isi 6</span><span class="price">Rp12.000 / Rp23.000</span></li>
+        <li><span>Es Jeruk</span><span class="price">Rp5.000</span></li>
+        <li><span>Es Teh Manis / Es Nutrisari</span><span class="price">Rp4.000</span></li>
+        <li><span>Tea Jus</span><span class="price">Rp2.000</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🍢 Sate</h3>
+      <ul class="menu-list">
+        <li><span>Sate Marangi</span><span class="price">Rp15.000</span></li>
+        <li><span>Nasi</span><span class="price">Rp5.000</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <b>Bakso Mamina</b> &bull; Alamat: <b>Cigedug Rajadesa</b>
+</footer>
+
+</body>
+</html>
