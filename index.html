@@ -313,7 +313,7 @@ function toggleCart(){
   p.style.right = sedangTerbuka ? '-380px' : '0px';
 }
 
-function toggleOpen(autoCloseMs = 5000){
+function toggleOpen(autoCloseMs = 2500){
   let p=document.getElementById('cartPanel');
   p.style.right='0px';
   p.scrollTo({top:0,behavior:'smooth'});
