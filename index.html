@@ -24,7 +24,7 @@ header img{width:82px;height:82px;border-radius:50%;border:3px solid #fff;object
 .qty-input{width:46px !important;padding:6px 4px !important;margin:0 !important;text-align:center;font-weight:bold;border-radius:8px !important;background:#2a2a2a;color:#fff}
 .topbar{position:sticky;top:118px;background:#000;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:9}
 .promo-track{flex:1;min-width:0;overflow:hidden;white-space:nowrap}
-.promo-text{display:inline-block;padding-left:20px;animation:jalanKananKeKiri 12s linear infinite}
+.promo-text{display:inline-block;padding-right:20px;animation:jalanKananKeKiri 12s linear infinite}
 @keyframes jalanKananKeKiri{
   0%{transform:translateX(100%)}
   100%{transform:translateX(-100%)}
@@ -34,12 +34,14 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.badge{position:absolute;top:-8px;right:-10px;background:var(--danger);padding:2px 7px;border-radius:50%;font-size:12px}
 #cartPanel{position:fixed;top:0;right:-380px;width:340px;height:100%;background:#111;z-index:99;padding:18px;transition:.35s;overflow:auto;box-shadow:-8px 0 20px rgba(0,0,0,.4)}
 .opsi-box{margin-top:8px;padding-top:8px;border-top:1px solid #333;font-size:11px;min-width:0}
-.isi-list{display:flex;flex-direction:row;gap:5px;margin-top:4px}
-.toping-row{display:flex;flex-wrap:row;align-items:center;gap:6px 10px;margin-top:4px;max-width:100%}
+.isi-list{display:flex;flex-direction:column;gap:5px;margin-top:4px}
+.toping-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:4px;max-width:100%}
 .opsi-label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;margin:0;line-height:1.25;max-width:100%}
 .opsi-label input{width:auto !important;margin:0 !important;padding:0 !important;flex-shrink:0}
 .cart-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #262626}
 .cart-mini-btn{border:none;background:#333;color:#fff;border-radius:6px;padding:2px 7px;cursor:pointer;font-weight:bold}
+.checkout-total{margin-top:12px;padding-top:10px;border-top:1px solid #333;font-size:15px;font-weight:bold;color:#ffd27d;display:flex;justify-content:space-between;align-items:center}
+.checkout-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 @media (prefers-reduced-motion: reduce){
   .brand-title,.promo-text{animation:none}
 }
@@ -47,7 +49,7 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 </head>
 <body>
 <header><img src="WhatsApp Image 2026-02-05 at 02.14.50.jpeg"><br><h1 class="brand-title">🍜 Bakso Mamina</h1><div>Mamina Style • Dark Premium</div></header>
-<div id="cartPanel"><h2>🛒 Keranjang</h2><div id="popupCart"></div><button class="btn" style="margin-top:12px" onclick="toggleCart()">Tutup</button></div>
+<div id="cartPanel"><h2>🛒 Keranjang</h2><div id="popupCart"></div><div class="checkout-total"><span>Total:</span><span>Rp<span id="popupTotal">0</span></span></div><button class="btn" style="margin-top:12px" onclick="toggleCart()">Tutup</button></div>
 <div class="topbar">
   <div class="promo-track"><span class="promo-text">🎉 Sate Marangi Hanya 15.000 / 10 Tusuk,-</span></div>
   <div onclick="toggleCart()" style="cursor:pointer;position:relative;flex-shrink:0">🛒 <span class="badge" id="badgeCart">0</span> <span id="jumlahItem">0</span> | Rp<span id="grandTotal">0</span></div>
@@ -58,7 +60,18 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 <h2 class="section">Daftar Menu</h2>
 <div class="grid" id="menuGrid"></div>
 <h2 class="section">Checkout</h2>
-<div class="card"><input id="meja" placeholder="Nomor meja / nama customer"> <button class="btn" onclick="kirimSheet()">📊 Kirim Order</button><div id="listCart" class="small" style="margin-top:10px"></div></div>
+<div class="card">
+  <input id="meja" placeholder="Nomor meja / nama customer">
+  <div id="listCart" class="small" style="margin-top:6px"></div>
+  <div class="checkout-total">
+    <span>Total Harga:</span>
+    <span>Rp<span id="checkoutTotal">0</span></span>
+  </div>
+  <div class="checkout-actions">
+    <button class="btn" onclick="kirimSheet()">📊 Kirim Order</button>
+    <button class="btn btn2" onclick="checkoutWA()">💬 Kirim WA</button>
+  </div>
+</div>
 </div>
 
 <script>
@@ -275,9 +288,12 @@ function render(rebuild=true){
       </div>`;
   });
 
+  const totalFormatted = rupiah(total);
   document.getElementById('jumlahItem').innerText=qty;
   document.getElementById('badgeCart').innerText=qty;
-  document.getElementById('grandTotal').innerText=rupiah(total);
+  document.getElementById('grandTotal').innerText=totalFormatted;
+  document.getElementById('checkoutTotal').innerText=totalFormatted;
+  document.getElementById('popupTotal').innerText=totalFormatted;
   document.getElementById('listCart').innerHTML=html||'Keranjang kosong';
   document.getElementById('popupCart').innerHTML=html||'Keranjang kosong';
   if(rebuild) buildMenu(activeList);
@@ -314,6 +330,10 @@ function animasi(){
 }
 
 function checkoutWA(){
+  if(cart.length === 0){
+    alert('Keranjang masih kosong! Masukkan jumlah atau klik + Masukkan Varian terlebih dahulu.');
+    return;
+  }
   let meja=document.getElementById('meja').value||'-';
   let txt='Halo, saya pesan%0A';
   cart.forEach(i=>{
@@ -324,7 +344,7 @@ function checkoutWA(){
     const info = catatan.length > 0 ? ` [${catatan.join(' | ')}]` : '';
     txt += `${i.nama}${info} x${i.qty} = Rp${rupiah(i.qty*i.harga)}%0A`;
   });
-  txt+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('grandTotal').innerText;
+  txt+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('checkoutTotal').innerText;
   window.open('https://wa.me/6285691916995?text='+txt,'_blank');
 }
 
@@ -350,7 +370,7 @@ function kirimSheet(){
 
   fetch(SHEET_URL,{
     method:'POST',
-    body:JSON.stringify({meja, cart: cartPayload, total:document.getElementById('grandTotal').innerText})
+    body:JSON.stringify({meja, cart: cartPayload, total:document.getElementById('checkoutTotal').innerText})
   }).then(()=>alert('Pesanan masuk Google Sheets'));
 }
 
