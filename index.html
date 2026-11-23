@@ -43,7 +43,6 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 .checkout-total{margin-top:12px;padding-top:10px;border-top:1px solid #333;font-size:15px;font-weight:bold;color:#ffd27d;display:flex;justify-content:space-between;align-items:center}
 .checkout-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 
-/* Styling Struk */
 #strukBox{display:none;margin-top:14px}
 .struk-paper{font-family:'Courier New',Courier,monospace;max-width:360px;margin:auto;background:#171717;color:#fff;padding:16px;border-radius:12px;border:1px dashed #777}
 .struk-header{text-align:center;border-bottom:1px dashed #777;padding-bottom:8px;margin-bottom:8px}
@@ -57,7 +56,6 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
   .brand-title,.promo-text{animation:none}
 }
 
-/* Mode Print / Simpan PDF: hanya cetak area struk dengan tampilan kertas putih */
 @media print{
   body{background:#fff !important;color:#000 !important}
   header,.topbar,#cartPanel,#searchMenu,.tabs,.section,#menuGrid,#checkoutCard,.no-print{display:none !important}
@@ -110,218 +108,218 @@ input{width:100%;padding:12px;border:none;border-radius:12px;background:#2a2a2a;
 <script>
 const SHEET_URL='https://script.google.com/macros/s/AKfycbyTS8x0KKybnZ-dujz1hsVi1tQq32iQQOSCEi0iOufI-s18ubEJDPEaO6954pq8ogVrVw/exec';
 let cart=[];
-let pilihanSementara={}; // { [namaMenu]: { isi: [], toping: [] } }
-let jumlahSementara={};  // { [namaMenu]: number }
-let cartAutoCloseTimer = null;
+let pilihanSementara={};
+let jumlahSementara={};
+let cartAutoCloseTimer=null;
 
 const menu=[
-['Bakso Daging',10000,'bakso'],['Bakso Urat Joss',15000,'bakso'],['Bakso Mercon',15000,'bakso'],['Bakso Keju',15000,'bakso'],['Bakso Telur',15000,'bakso'],['Bakso Daging Jumbo',20000,'bakso'],
+['Bakso Daging',10000,'bakso'],['Bakso Urat',15000,'bakso'],['Bakso Mercon',15000,'bakso'],['Bakso Keju',15000,'bakso'],['Bakso Telur',15000,'bakso'],['Bakso Daging Jumbo',20000,'bakso'],
 ['Mie Ayam',10000,'mie'],['Mie Ayam Tulang',15000,'mie'],['Mie Ayam Bakso Kecil',13000,'mie'],['Mie Ayam Bakso Daging',18000,'mie'],['Mie Ayam Bakso Urat Dll',24000,'mie'],['Mie Ayam Bakso Jumbo',29000,'mie'],
 ['Dimsum Ori isi 3',10000,'dimsum'],['Dimsum Ori isi 6',20000,'dimsum'],['Dimsum Mentai isi 3',12000,'dimsum'],['Dimsum Mentai isi 6',23000,'dimsum'],
 ['Es Jeruk',5000,'minum'],['Es Teh Manis',4000,'minum'],['Es Nutrisari',4000,'minum'],['Tea Jus',2000,'minum'],
 ['Sate Marangi',15000,'sate'],['Nasi',5000,'sate']];
 
-const menuBaksoChecklist = [
+const menuBaksoChecklist=[
   'Bakso Daging',
-  'Bakso Urat Joss',
+  'Bakso Urat',
   'Bakso Mercon',
   'Bakso Keju',
   'Bakso Telur',
-  'Bakso Daging Jumbo',
+  'Bakso Daging Jumbo'
 ];
 
-const opsiIsi = ['Bihun', 'Mie', 'Toge', 'Sawi'];
-const opsiToping = [
-  { nama: 'Tetelan', harga: 7000 },
-  { nama: 'Kikil', harga: 3000 },
-  { nama: 'Tahu', harga: 1000 }
+const opsiIsi=['Bihun','Mie','Toge','Sawi'];
+const opsiToping=[
+  {nama:'Tetelan',harga:7000},
+  {nama:'Kikil',harga:3000},
+  {nama:'Tahu',harga:1000}
 ];
 
-let activeList = menu;
+let activeList=menu;
 
-function rupiah(n){return n.toLocaleString('id-ID')}
+function rupiah(n){return Number(n||0).toLocaleString('id-ID')}
 
 function getStateOpsi(namaMenu){
   if(!pilihanSementara[namaMenu]){
-    pilihanSementara[namaMenu] = { isi: [], toping: [] };
+    pilihanSementara[namaMenu]={isi:[],toping:[]};
   }
   return pilihanSementara[namaMenu];
 }
 
 function hitungHargaToping(topingArr=[]){
-  return topingArr.reduce((sum, namaToping) => {
-    const found = opsiToping.find(t => t.nama === namaToping);
-    return sum + (found ? found.harga : 0);
-  }, 0);
+  return topingArr.reduce((sum,namaToping)=>{
+    const found=opsiToping.find(t=>t.nama===namaToping);
+    return sum+(found?found.harga:0);
+  },0);
 }
 
-function buatVarianKey(namaMenu, isiArr=[], topingArr=[]){
-  const isiKey = [...isiArr].sort().join(',');
-  const topingKey = [...topingArr].sort().join(',');
-  return `${namaMenu}||isi:${isiKey}||toping:${topingKey}`;
+function buatVarianKey(namaMenu,isiArr=[],topingArr=[]){
+  const isiKey=[...isiArr].sort().join(',');
+  const topingKey=[...topingArr].sort().join(',');
+  return namaMenu+'||isi:'+isiKey+'||toping:'+topingKey;
 }
 
-function ubahIsi(namaMenu, isi, isChecked){
-  const state = getStateOpsi(namaMenu);
+function ubahIsi(namaMenu,isi,isChecked){
+  const state=getStateOpsi(namaMenu);
   if(isChecked){
     if(!state.isi.includes(isi)) state.isi.push(isi);
-  } else {
-    state.isi = state.isi.filter(x => x !== isi);
+  }else{
+    state.isi=state.isi.filter(x=>x!==isi);
   }
 }
 
-function ubahToping(namaMenu, namaToping, isChecked){
-  const state = getStateOpsi(namaMenu);
+function ubahToping(namaMenu,namaToping,isChecked){
+  const state=getStateOpsi(namaMenu);
   if(isChecked){
     if(!state.toping.includes(namaToping)) state.toping.push(namaToping);
-  } else {
-    state.toping = state.toping.filter(x => x !== namaToping);
+  }else{
+    state.toping=state.toping.filter(x=>x!==namaToping);
   }
 }
 
-function masukkanVarianKeCart(namaMenu, hargaDasar, qtyOverride=null){
-  const state = getStateOpsi(namaMenu);
-  const inputQty = qtyOverride !== null ? qtyOverride : (jumlahSementara[namaMenu] || 1);
-  const qty = Math.max(1, parseInt(inputQty, 10) || 1);
-  const hargaSatuan = hargaDasar + hitungHargaToping(state.toping);
-  const key = buatVarianKey(namaMenu, state.isi, state.toping);
+function masukkanVarianKeCart(namaMenu,hargaDasar,qtyOverride=null){
+  const state=getStateOpsi(namaMenu);
+  const inputQty=qtyOverride!==null?qtyOverride:(jumlahSementara[namaMenu]||1);
+  const qty=Math.max(1,parseInt(inputQty,10)||1);
+  const hargaSatuan=hargaDasar+hitungHargaToping(state.toping);
+  const key=buatVarianKey(namaMenu,state.isi,state.toping);
 
-  const idx = cart.findIndex(x => x.key === key);
-  if(idx !== -1){
-    cart[idx].qty += qty;
-  } else {
+  const idx=cart.findIndex(x=>x.key===key);
+  if(idx!==-1){
+    cart[idx].qty+=qty;
+  }else{
     cart.push({
-      key: key,
-      namaDasar: namaMenu,
-      nama: namaMenu,
-      harga: hargaSatuan,
-      qty: qty,
-      isi: [...state.isi],
-      toping: [...state.toping]
+      key:key,
+      namaDasar:namaMenu,
+      nama:namaMenu,
+      harga:hargaSatuan,
+      qty:qty,
+      isi:[...state.isi],
+      toping:[...state.toping]
     });
   }
 
-  jumlahSementara[namaMenu] = 0;
+  jumlahSementara[namaMenu]=0;
   render();
   animasi();
   toggleOpen(3000);
 }
 
-function setJumlahLangsung(namaMenu, hargaDasar, nilaiBaru){
-  const qty = Math.max(0, parseInt(nilaiBaru, 10) || 0);
-  jumlahSementara[namaMenu] = qty;
-  if(qty > 0){
-    masukkanVarianKeCart(namaMenu, hargaDasar, qty);
+function setJumlahLangsung(namaMenu,hargaDasar,nilaiBaru){
+  const qty=Math.max(0,parseInt(nilaiBaru,10)||0);
+  jumlahSementara[namaMenu]=qty;
+  if(qty>0){
+    masukkanVarianKeCart(namaMenu,hargaDasar,qty);
   }
 }
 
-function tambah(namaMenu, hargaDasar){
-  masukkanVarianKeCart(namaMenu, hargaDasar, 1);
+function tambah(namaMenu,hargaDasar){
+  masukkanVarianKeCart(namaMenu,hargaDasar,1);
 }
 
 function kurang(namaMenu){
-  for(let i = cart.length - 1; i >= 0; i--){
-    if(cart[i].namaDasar === namaMenu){
-      ubahQtyCart(i, -1);
+  for(let i=cart.length-1;i>=0;i--){
+    if(cart[i].namaDasar===namaMenu){
+      ubahQtyCart(i,-1);
       return;
     }
   }
 }
 
-function ubahQtyCart(index, delta){
+function ubahQtyCart(index,delta){
   if(!cart[index]) return;
-  cart[index].qty += delta;
-  if(cart[index].qty <= 0){
-    cart.splice(index, 1);
+  cart[index].qty+=delta;
+  if(cart[index].qty<=0){
+    cart.splice(index,1);
   }
   render();
 }
 
 function buildMenu(arr=activeList){
-  activeList = arr;
-  const grid = document.getElementById('menuGrid');
+  activeList=arr;
+  const grid=document.getElementById('menuGrid');
   if(!grid) return;
 
   let html='';
   arr.forEach(m=>{
-    const namaMenu = m[0];
-    const hargaDasar = m[1];
-    const tampilChecklist = menuBaksoChecklist.includes(namaMenu);
-    const state = getStateOpsi(namaMenu);
-    const qtyInput = jumlahSementara[namaMenu] || 0;
+    const namaMenu=m[0];
+    const hargaDasar=m[1];
+    const tampilChecklist=menuBaksoChecklist.includes(namaMenu);
+    const state=getStateOpsi(namaMenu);
+    const qtyInput=jumlahSementara[namaMenu]||0;
 
-    html += `
+    html+=`
     <div class='card item ${m[2]}'>
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;min-width:0;">
         <div style="flex:1;min-width:0;">
           <h3 style="margin:0 0 4px">${namaMenu}</h3>
           <div class='price'>Rp${rupiah(hargaDasar)}</div>
 
-          ${tampilChecklist ? `
+          ${tampilChecklist?`
           <div class="opsi-box">
             <div style="color:#aaa;">Pilihan Isi</div>
             <div class="isi-list">
-              ${opsiIsi.map(isi => `
+              ${opsiIsi.map(isi=>`
                 <label class="opsi-label">
                   <input type="checkbox"
-                    ${state.isi.includes(isi) ? 'checked' : ''}
-                    onchange="ubahIsi('${namaMenu}', '${isi}', this.checked)"> ${isi}
+                    ${state.isi.includes(isi)?'checked':''}
+                    onchange="ubahIsi('${namaMenu}','${isi}',this.checked)"> ${isi}
                 </label>
               `).join('')}
             </div>
 
             <div style="color:#ffd27d;margin-top:8px;">Toping (Opsional)</div>
             <div class="toping-row">
-              ${opsiToping.map(t => `
+              ${opsiToping.map(t=>`
                 <label class="opsi-label">
                   <input type="checkbox"
-                    ${state.toping.includes(t.nama) ? 'checked' : ''}
-                    onchange="ubahToping('${namaMenu}', '${t.nama}', this.checked)"> ${t.nama} (+${rupiah(t.harga)})
+                    ${state.toping.includes(t.nama)?'checked':''}
+                    onchange="ubahToping('${namaMenu}','${t.nama}',this.checked)"> ${t.nama} (+${rupiah(t.harga)})
                 </label>
               `).join('')}
             </div>
 
-            <button class="btn-add" onclick="masukkanVarianKeCart('${namaMenu}', ${hargaDasar})">+ Masukkan Varian</button>
-          </div>` : ''}
+            <button class="btn-add" onclick="masukkanVarianKeCart('${namaMenu}',${hargaDasar})">+ Masukkan Varian</button>
+          </div>`:''}
         </div>
 
         <div class="qty" style="margin-top:0;">
           <button onclick="kurang('${namaMenu}')">−</button>
           <input type="number" min="0" class="qty-input" value="${qtyInput}"
-            onchange="setJumlahLangsung('${namaMenu}', ${hargaDasar}, this.value)">
-          <button onclick="tambah('${namaMenu}', ${hargaDasar})">+</button>
+            onchange="setJumlahLangsung('${namaMenu}',${hargaDasar},this.value)">
+          <button onclick="tambah('${namaMenu}',${hargaDasar})">+</button>
         </div>
       </div>
     </div>`;
   });
 
-  grid.innerHTML = html;
+  grid.innerHTML=html;
 }
 
 function formatDetailItem(item){
-  const parts = [];
-  if(item.isi && item.isi.length > 0) parts.push(`Isi: ${item.isi.join(', ')}`);
-  if(item.toping && item.toping.length > 0) parts.push(`Toping: ${item.toping.join(', ')}`);
+  const parts=[];
+  if(item.isi&&item.isi.length>0) parts.push('Isi: '+item.isi.join(', '));
+  if(item.toping&&item.toping.length>0) parts.push('Toping: '+item.toping.join(', '));
   else if(menuBaksoChecklist.includes(item.namaDasar)) parts.push('Tanpa toping');
-  return parts.length > 0 ? ` <span style="color:#ffd27d">[${parts.join(' | ')}]</span>` : '';
+  return parts.length>0?' <span style="color:#ffd27d">['+parts.join(' | ')+']</span>':'';
 }
 
 function render(rebuild=true){
-  let total=0, qty=0, html='';
-  cart.forEach((i, idx)=>{
+  let total=0,qty=0,html='';
+  cart.forEach((i,idx)=>{
     qty+=i.qty;
     total+=i.qty*i.harga;
     html+=`
       <div class="cart-row">
         <div>${i.nama}${formatDetailItem(i)} x${i.qty} - Rp${rupiah(i.qty*i.harga)}</div>
         <div style="display:flex;gap:4px;flex-shrink:0">
-          <button class="cart-mini-btn" onclick="ubahQtyCart(${idx}, -1)">−</button>
-          <button class="cart-mini-btn" onclick="ubahQtyCart(${idx}, 1)">+</button>
+          <button class="cart-mini-btn" onclick="ubahQtyCart(${idx},-1)">−</button>
+          <button class="cart-mini-btn" onclick="ubahQtyCart(${idx},1)">+</button>
         </div>
       </div>`;
   });
 
-  const totalFormatted = rupiah(total);
+  const totalFormatted=rupiah(total);
   document.getElementById('jumlahItem').innerText=qty;
   document.getElementById('badgeCart').innerText=qty;
   document.getElementById('grandTotal').innerText=totalFormatted;
@@ -335,26 +333,26 @@ function render(rebuild=true){
 function clearCartAutoCloseTimer(){
   if(cartAutoCloseTimer){
     clearTimeout(cartAutoCloseTimer);
-    cartAutoCloseTimer = null;
+    cartAutoCloseTimer=null;
   }
 }
 
 function toggleCart(){
   let p=document.getElementById('cartPanel');
-  const sedangTerbuka = p.style.right === '0px';
+  const sedangTerbuka=p.style.right==='0px';
   clearCartAutoCloseTimer();
-  p.style.right = sedangTerbuka ? '-380px' : '0px';
+  p.style.right=sedangTerbuka?'-380px':'0px';
 }
 
-function toggleOpen(autoCloseMs = 3000){
+function toggleOpen(autoCloseMs=3000){
   let p=document.getElementById('cartPanel');
   p.style.right='0px';
   p.scrollTo({top:0,behavior:'smooth'});
   clearCartAutoCloseTimer();
-  if(autoCloseMs > 0){
-    cartAutoCloseTimer = setTimeout(() => {
-      p.style.right = '-380px';
-    }, autoCloseMs);
+  if(autoCloseMs>0){
+    cartAutoCloseTimer=setTimeout(()=>{
+      p.style.right='-380px';
+    },autoCloseMs);
   }
 }
 
@@ -363,33 +361,33 @@ function animasi(){
 }
 
 function buatStruk(autoScroll=true){
-  if(cart.length === 0){
+  if(cart.length===0){
     alert('Keranjang masih kosong! Masukkan jumlah atau klik + Masukkan Varian terlebih dahulu.');
     return;
   }
-  const meja = document.getElementById('meja').value || '-';
-  const waktu = new Date().toLocaleString('id-ID');
-  let barisItem = '';
+  const meja=document.getElementById('meja').value||'-';
+  const waktu=new Date().toLocaleString('id-ID');
+  let barisItem='';
 
-  cart.forEach(i => {
-    const catatan = [];
-    if(i.isi && i.isi.length > 0) catatan.push('Isi: ' + i.isi.join(', '));
-    if(i.toping && i.toping.length > 0) catatan.push('Toping: ' + i.toping.join(', '));
+  cart.forEach(i=>{
+    const catatan=[];
+    if(i.isi&&i.isi.length>0) catatan.push('Isi: '+i.isi.join(', '));
+    if(i.toping&&i.toping.length>0) catatan.push('Toping: '+i.toping.join(', '));
     else if(menuBaksoChecklist.includes(i.namaDasar)) catatan.push('Tanpa toping');
-    const detail = catatan.length > 0 ? `<div class="struk-detail">(${catatan.join(' | ')})</div>` : '';
+    const detail=catatan.length>0?'<div class="struk-detail">('+catatan.join(' | ')+')</div>':'';
 
-    barisItem += `
+    barisItem+=`
       <div class="struk-item">
         <div class="struk-row">
           <span><b>${i.nama}</b> x${i.qty}</span>
-          <span>Rp${rupiah(i.qty * i.harga)}</span>
+          <span>Rp${rupiah(i.qty*i.harga)}</span>
         </div>
         ${detail}
       </div>`;
   });
 
-  const box = document.getElementById('strukBox');
-  box.innerHTML = `
+  const box=document.getElementById('strukBox');
+  box.innerHTML=`
     <div class="struk-paper">
       <div class="struk-header">
         <div style="font-size:16px;font-weight:bold;">🍜 BAKSO MAMINA</div>
@@ -409,46 +407,46 @@ function buatStruk(autoScroll=true){
       <button class="btn btn2" onclick="document.getElementById('strukBox').style.display='none'">Tutup Struk</button>
     </div>
   `;
-  box.style.display = 'block';
-  if(autoScroll) box.scrollIntoView({ behavior: 'smooth' });
+  box.style.display='block';
+  if(autoScroll) box.scrollIntoView({behavior:'smooth'});
 }
 
 function checkoutWA(){
-  if(cart.length === 0){
+  if(cart.length===0){
     alert('Keranjang masih kosong! Masukkan jumlah atau klik + Masukkan Varian terlebih dahulu.');
     return;
   }
   let meja=document.getElementById('meja').value||'-';
   let txt='Halo, saya pesan%0A';
   cart.forEach(i=>{
-    const catatan = [];
-    if(i.isi && i.isi.length > 0) catatan.push('Isi: ' + i.isi.join(', '));
-    if(i.toping && i.toping.length > 0) catatan.push('Toping: ' + i.toping.join(', '));
+    const catatan=[];
+    if(i.isi&&i.isi.length>0) catatan.push('Isi: '+i.isi.join(', '));
+    if(i.toping&&i.toping.length>0) catatan.push('Toping: '+i.toping.join(', '));
     else if(menuBaksoChecklist.includes(i.namaDasar)) catatan.push('Tanpa toping');
-    const info = catatan.length > 0 ? ` [${catatan.join(' | ')}]` : '';
-    txt += `${i.nama}${info} x${i.qty} = Rp${rupiah(i.qty*i.harga)}%0A`;
+    const info=catatan.length>0?' ['+catatan.join(' | ')+']':'';
+    txt+=i.nama+info+' x'+i.qty+' = Rp'+rupiah(i.qty*i.harga)+'%0A';
   });
   txt+='Meja/Nama: '+meja+'%0ATotal: Rp'+document.getElementById('checkoutTotal').innerText;
   window.open('https://wa.me/6285691916995?text='+txt,'_blank');
 }
 
 function kirimSheet(){
-  if(cart.length === 0){
+  if(cart.length===0){
     alert('Keranjang masih kosong! Masukkan jumlah atau klik + Masukkan Varian terlebih dahulu.');
     return;
   }
   let meja=document.getElementById('meja').value||'-';
-  let cartPayload = cart.map(i => {
-    const catatan = [];
-    if(i.isi && i.isi.length > 0) catatan.push('Isi: ' + i.isi.join(', '));
-    if(i.toping && i.toping.length > 0) catatan.push('Toping: ' + i.toping.join(', '));
+  let cartPayload=cart.map(i=>{
+    const catatan=[];
+    if(i.isi&&i.isi.length>0) catatan.push('Isi: '+i.isi.join(', '));
+    if(i.toping&&i.toping.length>0) catatan.push('Toping: '+i.toping.join(', '));
     else if(menuBaksoChecklist.includes(i.namaDasar)) catatan.push('Tanpa toping');
-    return {
-      nama: catatan.length > 0 ? `${i.nama} [${catatan.join(' | ')}]` : i.nama,
-      isi: i.isi || [],
-      toping: i.toping || [],
-      harga: i.harga,
-      qty: i.qty
+    return{
+      nama:catatan.length>0?i.nama+' ['+catatan.join(' | ')+']':i.nama,
+      isi:i.isi||[],
+      toping:i.toping||[],
+      harga:i.harga,
+      qty:i.qty
     };
   });
 
@@ -456,10 +454,22 @@ function kirimSheet(){
 
   fetch(SHEET_URL,{
     method:'POST',
-    body:JSON.stringify({meja, cart: cartPayload, total:document.getElementById('checkoutTotal').innerText})
+    body:JSON.stringify({meja,cart:cartPayload,total:document.getElementById('checkoutTotal').innerText})
   }).then(()=>alert('Pesanan masuk Google Sheets & struk siap dicetak'));
 }
 
 function filterMenu(){
   let q=document.getElementById('searchMenu').value.toLowerCase();
-  buildMenu(menu.filter(m=
+  buildMenu(menu.filter(m=>m[0].toLowerCase().includes(q)));
+}
+function filterKategori(k){
+  document.getElementById('searchMenu').value='';
+  if(k==='all'){buildMenu(menu);return;}
+  buildMenu(menu.filter(m=>m[2]===k));
+}
+
+buildMenu();
+render();
+</script>
+</body>
+</html>
